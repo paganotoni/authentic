@@ -6,7 +6,7 @@ import (
 
 //User represents a logeable user
 type User struct {
-	//TODO: need to clarify this one.
+	//TODO: need to clarify this one in the docs.
 	ID                   interface{} `json:"id" db:"id"`
 	Email                string      `json:"email" db:"email"`
 	Password             string      `json:"-" db:"-"`
@@ -17,7 +17,7 @@ type User struct {
 //TODO: confirmation validation
 //TODO: autmatic encrypted password asignation
 
-//SetEncryptedPassword assigns the hashed password from the pass set into Password.
+//SetEncryptedPassword
 func (u *User) SetEncryptedPassword() error {
 	if u.Password == "" {
 		return nil
@@ -36,7 +36,7 @@ func (u *User) SetEncryptedPassword() error {
 
 //ValidPassword returns wether a password is valid or not for a user by using bCrypt
 //to compare the passed password with user's EncryptedPassword
-func (u *User) ValidPassword(password string) bool {
+func (u User) ValidPassword(password string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(u.EncryptedPassword), []byte(password))
 
 	if err != nil {
@@ -44,4 +44,16 @@ func (u *User) ValidPassword(password string) bool {
 	}
 
 	return true
+}
+
+func (u User) GetID() interface{} {
+	return u.ID
+}
+
+type PasswordValidable interface {
+	ValidPassword(password string) bool
+}
+
+type SessionStorable interface {
+	GetID() interface{}
 }

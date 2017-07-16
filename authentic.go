@@ -23,8 +23,10 @@ type Config struct {
 	LogoutPath      string
 	AfterLoginPath  string
 	AfterLogoutPath string
-	LoginPage       render.Renderer
-	PublicHandlers  []buffalo.Handler
+
+	//TODO: Default login page.
+	LoginPage      render.Renderer
+	PublicHandlers []buffalo.Handler
 }
 
 //AuthorizeMW Checks if the user is logged into the app if is not
@@ -67,7 +69,7 @@ func (a Authentic) CurrentUserMW(h buffalo.Handler) buffalo.Handler {
 			return errors.WithStack(err)
 		}
 
-		err = a.provider.SetUserDetails(user, c)
+		err = a.provider.UserDetails(user, c)
 		if err != nil {
 			return errors.WithStack(err)
 		}
@@ -87,20 +89,23 @@ func (a Authentic) loginHandler(c buffalo.Context) error {
 	}{}
 	c.Bind(&loginData)
 
-	user, err := a.provider.FindByUsername(loginData.Username)
-	if err != nil || user.ValidPassword(loginData.Password) == false {
+	u, err := a.provider.FindByUsername(loginData.Username)
+	if err != nil || u.ValidPassword(loginData.Password) == false {
 		c.Flash().Add("error", "Invalid Username or Password")
 		return c.Redirect(http.StatusSeeOther, a.Config.LoginPath)
 	}
 
-	c.Session().Set(sessionField, user.ID)
+	//TODO: ensure this ID corresponds to the end-app ID and not our
+	//internal type's.
+	c.Session().Set(sessionField, u.(SessionStorable).GetID())
 	c.Session().Save()
 
-	return c.Redirect(302, a.Config.AfterLoginPath)
+	return c.Redirect(http.StatusSeeOther, a.Config.AfterLoginPath)
 }
 
 //LogoutHandler logs the user out and redirect to the AfterLogoutPath
 func (a Authentic) logoutHandler(c buffalo.Context) error {
+	c.Flash().Add("success", "Logged out from your account.")
 	c.Session().Delete(sessionField)
 	c.Session().Save()
 
@@ -141,6 +146,7 @@ func Setup(app *buffalo.App, provider Provider, config Config) *Authentic {
 	return manager
 }
 
+//applyDefaultConfig applies default configuration to the Config object.
 func applyDefaultConfig(c Config) Config {
 	if c.LoginPath == "" {
 		c.LoginPath = "/auth/login"
