@@ -63,7 +63,7 @@ func (a Authentic) CurrentUserMW(h buffalo.Handler) buffalo.Handler {
 			return errors.WithStack(err)
 		}
 
-		err = a.provider.SetSessionUserDetails(user, c)
+		err = a.provider.SetUserDetails(user, c)
 		if err != nil {
 			return errors.WithStack(err)
 		}
