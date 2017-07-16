@@ -20,6 +20,7 @@ type Authentic struct {
 //Config holds detailed configuration for your authentication flow.
 type Config struct {
 	LoginPath       string
+	LogoutPath      string
 	AfterLoginPath  string
 	AfterLogoutPath string
 	LoginPage       render.Renderer
@@ -31,7 +32,9 @@ type Config struct {
 //This one is exposed so developers can skip handlers.
 func (a Authentic) AuthorizeMW(h buffalo.Handler) buffalo.Handler {
 	return func(c buffalo.Context) error {
-		//TODO: TEST ENVIRONMENT
+		if a.app.Env == "test" {
+			return h(c)
+		}
 
 		userID := c.Session().Get(sessionField)
 		if userID == nil {
@@ -39,7 +42,7 @@ func (a Authentic) AuthorizeMW(h buffalo.Handler) buffalo.Handler {
 			return c.Redirect(302, a.Config.LoginPath)
 		}
 
-		user, err := a.provider.FindUser(userID)
+		user, err := a.provider.FindByID(userID)
 
 		if err != nil || user == nil {
 			c.Flash().Set("error", []string{"Need to login first."})
@@ -50,6 +53,7 @@ func (a Authentic) AuthorizeMW(h buffalo.Handler) buffalo.Handler {
 	}
 }
 
+//CurrentUserMW will be called on every
 func (a Authentic) CurrentUserMW(h buffalo.Handler) buffalo.Handler {
 	return func(c buffalo.Context) error {
 		userID := c.Value(sessionField)
@@ -58,7 +62,7 @@ func (a Authentic) CurrentUserMW(h buffalo.Handler) buffalo.Handler {
 			return h(c)
 		}
 
-		user, err := a.provider.FindUser(userID)
+		user, err := a.provider.FindByID(userID)
 		if err != nil {
 			return errors.WithStack(err)
 		}
@@ -81,16 +85,15 @@ func (a Authentic) loginHandler(c buffalo.Context) error {
 		Username string
 		Password string
 	}{}
-
 	c.Bind(&loginData)
-	userID, err := a.provider.AuthenticateUser(loginData.Username, loginData.Password)
 
-	if err != nil {
+	user, err := a.provider.FindByUsername(loginData.Username)
+	if err != nil || user.ValidPassword(loginData.Password) == false {
 		c.Flash().Add("error", "Invalid Username or Password")
 		return c.Redirect(http.StatusSeeOther, a.Config.LoginPath)
 	}
 
-	c.Session().Set(sessionField, userID)
+	c.Session().Set(sessionField, user.ID)
 	c.Session().Save()
 
 	return c.Redirect(302, a.Config.AfterLoginPath)
@@ -116,6 +119,8 @@ func (a Authentic) login(c buffalo.Context) error {
 // - Login form handler
 // - Logout handler
 func Setup(app *buffalo.App, provider Provider, config Config) *Authentic {
+	config = applyDefaultConfig(config)
+
 	manager := &Authentic{
 		app:      app,
 		provider: provider,
@@ -126,10 +131,32 @@ func Setup(app *buffalo.App, provider Provider, config Config) *Authentic {
 
 	app.GET(config.LoginPath, manager.login)
 	app.POST(config.LoginPath, manager.loginHandler)
-	app.DELETE("/auth/logout", manager.logoutHandler)
+	app.DELETE(config.LogoutPath, manager.logoutHandler)
 
-	app.Middleware.Skip(manager.AuthorizeMW, manager.login, manager.loginHandler, manager.logoutHandler)
-	app.Middleware.Skip(manager.AuthorizeMW, manager.Config.PublicHandlers...)
+	for _, mw := range []buffalo.MiddlewareFunc{manager.CurrentUserMW, manager.AuthorizeMW} {
+		app.Middleware.Skip(mw, manager.login, manager.loginHandler, manager.logoutHandler)
+		app.Middleware.Skip(mw, manager.Config.PublicHandlers...)
+	}
 
 	return manager
+}
+
+func applyDefaultConfig(c Config) Config {
+	if c.LoginPath == "" {
+		c.LoginPath = "/auth/login"
+	}
+
+	if c.LogoutPath == "" {
+		c.LogoutPath = "/auth/logout"
+	}
+
+	if c.AfterLoginPath == "" {
+		c.AfterLoginPath = "/"
+	}
+
+	if c.AfterLogoutPath == "" {
+		c.AfterLogoutPath = "/"
+	}
+
+	return c
 }
