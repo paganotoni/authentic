@@ -5,6 +5,7 @@ import (
 
 	"github.com/gobuffalo/buffalo"
 	"github.com/gobuffalo/buffalo/render"
+	"github.com/pkg/errors"
 )
 
 var sessionField = "userID"
@@ -38,11 +39,33 @@ func (a Authentic) AuthorizeMW(h buffalo.Handler) buffalo.Handler {
 			return c.Redirect(302, a.Config.LoginPath)
 		}
 
-		exists, err := a.provider.UserExists(userID)
+		user, err := a.provider.FindUser(userID)
 
-		if err != nil || !exists {
+		if err != nil || user == nil {
 			c.Flash().Set("error", []string{"Need to login first."})
 			return c.Redirect(302, a.Config.LoginPath)
+		}
+
+		return h(c)
+	}
+}
+
+func (a Authentic) CurrentUserMW(h buffalo.Handler) buffalo.Handler {
+	return func(c buffalo.Context) error {
+		userID := c.Value(sessionField)
+
+		if userID == nil {
+			return h(c)
+		}
+
+		user, err := a.provider.FindUser(userID)
+		if err != nil {
+			return errors.WithStack(err)
+		}
+
+		err = a.provider.SetSessionUserDetails(user, c)
+		if err != nil {
+			return errors.WithStack(err)
 		}
 
 		return h(c)
@@ -88,6 +111,7 @@ func (a Authentic) login(c buffalo.Context) error {
 
 //Setup configures and app it adds:
 // - Authorization Midleware
+// - Current User Middleware
 // - Login page
 // - Login form handler
 // - Logout handler
@@ -98,13 +122,13 @@ func Setup(app *buffalo.App, provider Provider, config Config) *Authentic {
 		Config:   config,
 	}
 
-	app.Use(manager.AuthorizeMW)
+	app.Use(manager.AuthorizeMW, manager.CurrentUserMW)
+
 	app.GET(config.LoginPath, manager.login)
 	app.POST(config.LoginPath, manager.loginHandler)
 	app.DELETE("/auth/logout", manager.logoutHandler)
 
 	app.Middleware.Skip(manager.AuthorizeMW, manager.login, manager.loginHandler, manager.logoutHandler)
-	//Skipping user provided handlers
 	app.Middleware.Skip(manager.AuthorizeMW, manager.Config.PublicHandlers...)
 
 	return manager
