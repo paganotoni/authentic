@@ -3,6 +3,8 @@ package authentic
 import (
 	"net/http"
 
+	"golang.org/x/crypto/bcrypt"
+
 	"github.com/gobuffalo/buffalo"
 	"github.com/gobuffalo/buffalo/render"
 	"github.com/pkg/errors"
@@ -41,14 +43,14 @@ func (a Authentic) AuthorizeMW(h buffalo.Handler) buffalo.Handler {
 		userID := c.Session().Get(sessionField)
 		if userID == nil {
 			c.Flash().Set("error", []string{"Need to login first."})
-			return c.Redirect(302, a.Config.LoginPath)
+			return c.Redirect(http.StatusSeeOther, a.Config.LoginPath)
 		}
 
 		user, err := a.provider.FindByID(userID)
 
 		if err != nil || user == nil {
 			c.Flash().Set("error", []string{"Need to login first."})
-			return c.Redirect(302, a.Config.LoginPath)
+			return c.Redirect(http.StatusSeeOther, a.Config.LoginPath)
 		}
 
 		return h(c)
@@ -58,10 +60,11 @@ func (a Authentic) AuthorizeMW(h buffalo.Handler) buffalo.Handler {
 //CurrentUserMW will be called on every
 func (a Authentic) CurrentUserMW(h buffalo.Handler) buffalo.Handler {
 	return func(c buffalo.Context) error {
-		userID := c.Value(sessionField)
+		userID := c.Session().Get(sessionField)
 
 		if userID == nil {
-			return h(c)
+			c.Flash().Set("error", []string{"Need to login first."})
+			return c.Redirect(http.StatusSeeOther, a.Config.LoginPath)
 		}
 
 		user, err := a.provider.FindByID(userID)
@@ -83,21 +86,21 @@ func (a Authentic) CurrentUserMW(h buffalo.Handler) buffalo.Handler {
 func (a Authentic) loginHandler(c buffalo.Context) error {
 	c.Request().ParseForm()
 
+	//TODO: schema ?
 	loginData := struct {
 		Username string
 		Password string
 	}{}
+
 	c.Bind(&loginData)
 
 	u, err := a.provider.FindByUsername(loginData.Username)
-	if err != nil || u.ValidPassword(loginData.Password) == false {
+	if err != nil || ValidatePassword(loginData.Password, u) == false {
 		c.Flash().Add("error", "Invalid Username or Password")
 		return c.Redirect(http.StatusSeeOther, a.Config.LoginPath)
 	}
 
-	//TODO: ensure this ID corresponds to the end-app ID and not our
-	//internal type's.
-	c.Session().Set(sessionField, u.(SessionStorable).GetID())
+	c.Session().Set(sessionField, u.GetID())
 	c.Session().Save()
 
 	return c.Redirect(http.StatusSeeOther, a.Config.AfterLoginPath)
@@ -115,6 +118,17 @@ func (a Authentic) logoutHandler(c buffalo.Context) error {
 //Login will render your login page
 func (a Authentic) login(c buffalo.Context) error {
 	return c.Render(200, a.Config.LoginPage)
+}
+
+//ValidatePassword compares a raw password with the Authenticable encrypted one.
+func ValidatePassword(password string, user Authenticable) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(user.GetEncryptedPassword()), []byte(password))
+
+	if err != nil {
+		return false
+	}
+
+	return true
 }
 
 //Setup configures and app it adds:

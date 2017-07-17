@@ -10,16 +10,9 @@ import (
 func Test_ValidPassword(t *testing.T) {
 	r := require.New(t)
 
-	custom := struct {
-		authentic.User
-		Name string
-	}{}
-
-	custom.Password = "hola"
-	custom.SetEncryptedPassword()
-
-	r.NotEmpty(custom.EncryptedPassword)
-	r.NotEqual(custom.Password, custom.EncryptedPassword)
+	custom := testUser{
+		Password: "hola",
+	}
 
 	cases := []struct {
 		Name    string
@@ -33,7 +26,7 @@ func Test_ValidPassword(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.Name, func(e *testing.T) {
-			r.Equal(custom.ValidPassword(c.Attempt), c.Valid)
+			r.Equal(authentic.ValidatePassword(c.Attempt, custom), c.Valid)
 		})
 	}
 }

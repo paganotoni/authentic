@@ -1,7 +1,6 @@
 package authentic_test
 
 import (
-	"errors"
 	"net/http"
 	"testing"
 
@@ -79,58 +78,4 @@ func Test_Login(t *testing.T) {
 		})
 
 	}
-}
-
-type testUser struct {
-	authentic.User
-	Name string
-}
-
-type testAuthProvider struct {
-	username, password, id string
-	user                   testUser
-}
-
-func (ta testAuthProvider) FindByID(userID interface{}) (interface{}, error) {
-	if userID.(string) == ta.id {
-		return ta.user, nil
-	}
-
-	return nil, errors.New("user not found")
-}
-
-func (ta testAuthProvider) FindByUsername(username string) (authentic.PasswordValidable, error) {
-	if username == ta.username {
-		return ta.user, nil
-	}
-
-	return nil, errors.New("user not found")
-}
-
-func (ta testAuthProvider) UserDetails(user interface{}, c buffalo.Context) error {
-	c.Set("name", ta.user.Name)
-
-	return nil
-}
-
-func newTestAuthProvider(username, password, id, name string) testAuthProvider {
-	user := testUser{
-		Name: name,
-	}
-
-	user.Password = password
-	user.ID = id
-	user.Email = username
-
-	user.SetEncryptedPassword()
-
-	provider := testAuthProvider{
-		username: username,
-		password: password,
-		id:       id,
-		user:     user,
-	}
-
-	return provider
-
 }
