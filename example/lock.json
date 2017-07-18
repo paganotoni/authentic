@@ -1,0 +1,536 @@
+{
+    "memo": "6edf0014120ec58d86a46c7ba55eec300e3a13a05a23390e58639259c68aeea9",
+    "projects": [
+        {
+            "name": "github.com/ajg/form",
+            "branch": "master",
+            "revision": "523a5da1a92f01b01f840b61689c0340a0243532",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/davecgh/go-spew",
+            "version": "v1.1.0",
+            "revision": "346938d642f2ec3594ed81d874461961cd0faa76",
+            "packages": [
+                "spew"
+            ]
+        },
+        {
+            "name": "github.com/daviddengcn/go-colortext",
+            "branch": "master",
+            "revision": "805cee6e0d43c72ba1d4e3275965ff41e0da068a",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/dustin/go-humanize",
+            "branch": "master",
+            "revision": "259d2a102b871d17f30e3cd9881a642961a1e486",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/fatih/color",
+            "branch": "master",
+            "revision": "62e9147c64a1ed519147b62a56a14e83e2be02c1",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/fsnotify/fsnotify",
+            "branch": "master",
+            "revision": "4da3e2cfbabc9f751898f250b49f2439785783a1",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/go-sql-driver/mysql",
+            "branch": "master",
+            "revision": "bf7f34fef176d890dfcc6e94319ac747291bc09a",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/gobuffalo/buffalo",
+            "branch": "development",
+            "revision": "17bb10580419e88951412bec66232876434707aa",
+            "packages": [
+                ".",
+                "binding",
+                "middleware",
+                "middleware/csrf",
+                "middleware/i18n",
+                "render",
+                "worker"
+            ]
+        },
+        {
+            "name": "github.com/gobuffalo/envy",
+            "branch": "master",
+            "revision": "a901aeb76c2647ce52acf7f3bac64c4def49a899",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/gobuffalo/packr",
+            "branch": "master",
+            "revision": "9d3b78bfcb56d490ba2cae05965890154f04f6f1",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/gobuffalo/plush",
+            "branch": "master",
+            "revision": "e1785b00acdbb44d102f338610670868ce449c0f",
+            "packages": [
+                ".",
+                "ast",
+                "lexer",
+                "parser",
+                "token"
+            ]
+        },
+        {
+            "name": "github.com/gobuffalo/suite",
+            "branch": "master",
+            "revision": "8e9fbf70cd1d097f556f5de0c391cc4acb83dacd",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/gobuffalo/tags",
+            "branch": "master",
+            "revision": "0f2f31793228e1aa58283271991adf2d27db3b4f",
+            "packages": [
+                ".",
+                "form",
+                "form/bootstrap"
+            ]
+        },
+        {
+            "name": "github.com/gorilla/context",
+            "branch": "master",
+            "revision": "08b5f424b9271eedf6f9f0ce86cb9396ed337a42",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/gorilla/mux",
+            "branch": "master",
+            "revision": "8c683ee571b6ee7ffc9f1cafd13103c422e71cbf",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/gorilla/securecookie",
+            "branch": "master",
+            "revision": "e59506cc896acb7f7bf732d4fdf5e25f7ccd8983",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/gorilla/sessions",
+            "branch": "master",
+            "revision": "8b6b4cd75f07f7ee036eb37b8127bd40ab1efc49",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/gorilla/websocket",
+            "branch": "master",
+            "revision": "ea4d1f681babbce9545c9c5f3d5194a789c89f5b",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/jmoiron/sqlx",
+            "branch": "master",
+            "revision": "d9bd385d68c068f1fabb5057e3dedcbcbb039d0f",
+            "packages": [
+                ".",
+                "reflectx"
+            ]
+        },
+        {
+            "name": "github.com/lib/pq",
+            "branch": "master",
+            "revision": "dd1fe2071026ce53f36a39112e645b4d4f5793a4",
+            "packages": [
+                ".",
+                "oid"
+            ]
+        },
+        {
+            "name": "github.com/markbates/going",
+            "branch": "master",
+            "revision": "0576708c56cea02331f864fe6e157ac7841923e4",
+            "packages": [
+                "defaults",
+                "randx",
+                "wait"
+            ]
+        },
+        {
+            "name": "github.com/markbates/grift",
+            "branch": "master",
+            "revision": "8e706d9b1370e074ed48f3e56b5d29c8b01dd635",
+            "packages": [
+                "grift"
+            ]
+        },
+        {
+            "name": "github.com/markbates/hmax",
+            "branch": "master",
+            "revision": "800e180dcd16937a4cc134c6aa8c8407e62ce880",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/markbates/inflect",
+            "branch": "master",
+            "revision": "6cacb66d100482ef7cc366289ccb156020e57e76",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/markbates/pop",
+            "branch": "master",
+            "revision": "7518dc6dac044def7aa1e19b6f9af22a8c50c342",
+            "packages": [
+                ".",
+                "columns",
+                "fizz",
+                "fizz/translators",
+                "nulls"
+            ]
+        },
+        {
+            "name": "github.com/markbates/refresh",
+            "branch": "master",
+            "revision": "0b2bb8035576fb5fffcee9eed3233be1abdc9098",
+            "packages": [
+                "refresh",
+                "refresh/web"
+            ]
+        },
+        {
+            "name": "github.com/markbates/validate",
+            "branch": "master",
+            "revision": "a493a25ad6300ad101d9f490fe31f48bfd808ba9",
+            "packages": [
+                ".",
+                "validators"
+            ]
+        },
+        {
+            "name": "github.com/markbates/willie",
+            "branch": "master",
+            "revision": "cf7c4a7c06ea6a65b79294bbfb4ae18b580f6ecc",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/mattn/anko",
+            "branch": "master",
+            "revision": "a3969c63681391ec413427cae813d6d59d6031f1",
+            "packages": [
+                "ast",
+                "builtins",
+                "builtins/encoding/json",
+                "builtins/errors",
+                "builtins/flag",
+                "builtins/fmt",
+                "builtins/github.com/daviddengcn/go-colortext",
+                "builtins/io",
+                "builtins/io/ioutil",
+                "builtins/math",
+                "builtins/math/big",
+                "builtins/math/rand",
+                "builtins/net",
+                "builtins/net/http",
+                "builtins/net/url",
+                "builtins/os",
+                "builtins/os/exec",
+                "builtins/os/signal",
+                "builtins/path",
+                "builtins/path/filepath",
+                "builtins/regexp",
+                "builtins/runtime",
+                "builtins/sort",
+                "builtins/strings",
+                "builtins/time",
+                "parser",
+                "vm"
+            ]
+        },
+        {
+            "name": "github.com/mattn/go-colorable",
+            "branch": "master",
+            "revision": "d898aa9fb31c91f35dd28ca75db377eff023c076",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/mattn/go-isatty",
+            "branch": "master",
+            "revision": "dda3de49cbfcec471bd7a70e6cc01fcc3ff90109",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/mattn/go-sqlite3",
+            "branch": "master",
+            "revision": "47fc4e5e9153645da45af6a86a5bce95e63a0f9e",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/microcosm-cc/bluemonday",
+            "branch": "master",
+            "revision": "e79763773ab6222ca1d5a7cbd9d62d83c1f77081",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/mitchellh/go-homedir",
+            "branch": "master",
+            "revision": "b8bc1bf767474819792c23f32d8286a45736f1c6",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/monoculum/formam",
+            "branch": "master",
+            "revision": "99ca9dcbaca6d91e9665f817d0da23af6184ced3",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/nicksnyder/go-i18n",
+            "branch": "master",
+            "revision": "3e70a1a463008cea6726380c908b1a6a8bdf7b24",
+            "packages": [
+                "i18n",
+                "i18n/bundle",
+                "i18n/language",
+                "i18n/translation"
+            ]
+        },
+        {
+            "name": "github.com/pelletier/go-buffruneio",
+            "branch": "master",
+            "revision": "c37440a7cf42ac63b919c752ca73a85067e05992",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/pelletier/go-toml",
+            "branch": "master",
+            "revision": "4a000a21a414d139727f616a8bb97f847b1b310b",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/pkg/errors",
+            "branch": "master",
+            "revision": "c605e284fe17294bda444b34710735b29d1a9d90",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/pmezard/go-difflib",
+            "version": "v1.0.0",
+            "revision": "792786c7400a136282c1664665ae0a8db921c6c2",
+            "packages": [
+                "difflib"
+            ]
+        },
+        {
+            "name": "github.com/russross/blackfriday",
+            "branch": "master",
+            "revision": "067529f716f4c3f5e37c8c95ddd59df1007290ae",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/satori/go.uuid",
+            "branch": "master",
+            "revision": "5bf94b69c6b68ee1b541973bb8e1144db23a194b",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/serenize/snaker",
+            "branch": "master",
+            "revision": "1c7f65329f6524115af8ca01ab604c00cddf5558",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/sergi/go-diff",
+            "branch": "master",
+            "revision": "feef008d51ad2b3778f85d387ccf91735543008d",
+            "packages": [
+                "diffmatchpatch"
+            ]
+        },
+        {
+            "name": "github.com/shurcooL/github_flavored_markdown",
+            "branch": "master",
+            "revision": "3c64cb3ce00a3f4feae0c53ce7c2cc2fdacba14b",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/shurcooL/go",
+            "branch": "master",
+            "revision": "5924e6132c2f184e262d4bc779e5745fa297d093",
+            "packages": [
+                "parserutil",
+                "printerutil",
+                "reflectfind",
+                "reflectsource"
+            ]
+        },
+        {
+            "name": "github.com/shurcooL/go-goon",
+            "branch": "master",
+            "revision": "a0792a0a8f8fa9a233843e67079b051b571e609c",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/shurcooL/highlight_diff",
+            "branch": "master",
+            "revision": "09bb4053de1b1d872a9f25dc21378fa71dca4e4e",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/shurcooL/highlight_go",
+            "branch": "master",
+            "revision": "78fb10f4a5f89e812a5e26ab723b954a51226086",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/shurcooL/octiconssvg",
+            "branch": "master",
+            "revision": "1aed2117d2aa8eed76a052936e468e5354750701",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/shurcooL/sanitized_anchor_name",
+            "branch": "master",
+            "revision": "541ff5ee47f1dddf6a5281af78307d921524bcb5",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/sirupsen/logrus",
+            "branch": "master",
+            "revision": "3d4380f53a34dcdc95f0c1db702615992b38d9a4",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/sourcegraph/annotate",
+            "branch": "master",
+            "revision": "f4cad6c6324d3f584e1743d8b3e0e017a5f3a636",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/sourcegraph/syntaxhighlight",
+            "branch": "master",
+            "revision": "bd320f5d308e1a3c4314c678d8227a0d72574ae7",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/stretchr/testify",
+            "branch": "master",
+            "revision": "4d4bfba8f1d1027c4fdbe371823030df51419987",
+            "packages": [
+                "assert",
+                "require",
+                "suite"
+            ]
+        },
+        {
+            "name": "golang.org/x/crypto",
+            "branch": "master",
+            "revision": "e1a4589e7d3ea14a3352255d04b6f1a418845e5e",
+            "packages": [
+                "bcrypt",
+                "blowfish"
+            ]
+        },
+        {
+            "name": "golang.org/x/net",
+            "branch": "master",
+            "revision": "f01ecb60fe3835d80d9a0b7b2bf24b228c89260e",
+            "packages": [
+                "context",
+                "html",
+                "html/atom"
+            ]
+        },
+        {
+            "name": "golang.org/x/sys",
+            "branch": "master",
+            "revision": "abf9c25f54453410d0c6668e519582a9e1115027",
+            "packages": [
+                "unix"
+            ]
+        },
+        {
+            "name": "gopkg.in/yaml.v2",
+            "branch": "v2",
+            "revision": "1be3d31502d6eabc0dd7ce5b0daab022e14a5538",
+            "packages": [
+                "."
+            ]
+        }
+    ]
+}

@@ -1,0 +1,22 @@
+<section class="login-content">
+    <div class="content">
+
+        <div class="text-center">
+            <h1>Example App</h1>
+            <h4>Login into your account</h4>
+        </div>
+        
+        <div class="login-wrapper">
+            
+            <%= form({action: "/auth/login", method: "POST"}) { %>
+                <%= f.InputTag({"name": "Username", "placeholder":"Username"})%>
+                <%= f.InputTag({"name": "Password", "type": "password", "placeholder":"Password"})%>
+                <%= f.InputTag({"type": "submit", "class":"btn btn-primary"})%>
+            <% } %>
+            
+            <div class="text-center">
+                <a class="forgot-pass" href="/"><i class="fa fa-angle-left"></i> Back to landing</a>
+            </div>
+        </div>
+    </div>
+</section>

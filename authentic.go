@@ -42,14 +42,14 @@ func (a Authentic) AuthorizeMW(h buffalo.Handler) buffalo.Handler {
 
 		userID := c.Session().Get(sessionField)
 		if userID == nil {
-			c.Flash().Set("error", []string{"Need to login first."})
+			c.Flash().Set("warning", []string{"Need to login first."})
 			return c.Redirect(http.StatusSeeOther, a.Config.LoginPath)
 		}
 
 		user, err := a.provider.FindByID(userID)
 
 		if err != nil || user == nil {
-			c.Flash().Set("error", []string{"Need to login first."})
+			c.Flash().Set("warning", []string{"Need to login first."})
 			return c.Redirect(http.StatusSeeOther, a.Config.LoginPath)
 		}
 
@@ -63,8 +63,7 @@ func (a Authentic) CurrentUserMW(h buffalo.Handler) buffalo.Handler {
 		userID := c.Session().Get(sessionField)
 
 		if userID == nil {
-			c.Flash().Set("error", []string{"Need to login first."})
-			return c.Redirect(http.StatusSeeOther, a.Config.LoginPath)
+			return h(c)
 		}
 
 		user, err := a.provider.FindByID(userID)
@@ -96,7 +95,7 @@ func (a Authentic) loginHandler(c buffalo.Context) error {
 
 	u, err := a.provider.FindByUsername(loginData.Username)
 	if err != nil || ValidatePassword(loginData.Password, u) == false {
-		c.Flash().Add("error", "Invalid Username or Password")
+		c.Flash().Add("danger", "Invalid Username or Password")
 		return c.Redirect(http.StatusSeeOther, a.Config.LoginPath)
 	}
 
