@@ -2,7 +2,7 @@
 
 ### Authentic
 
-Authentic is a library to implement username/password authentication easier in buffalo.
+Authentic is a library to implement username/password authentication easier in [Buffalo](https://github.com/gobuffalo/buffalo).
 
 #### Demo application
 
@@ -20,6 +20,6 @@ After that you can run the `buffalo dev` command and as usual you can check it o
 
 Default username/password generated are `test@test.com` and `password123`.
 
-#### Adding Authentic to your app
+#### Adding Authentic to your Buffalo app
 
 [COMMING SOON]
