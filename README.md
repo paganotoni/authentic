@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/apaganobeleno/authentic.svg?branch=master)](https://travis-ci.org/apaganobeleno/authentic)
+
 ### Authentic
 
 Authentic is a libraty to implement Username/password authentication easier in buffalo.
