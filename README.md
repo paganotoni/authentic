@@ -2,7 +2,7 @@
 
 ### Authentic
 
-Authentic is a libraty to implement Username/password authentication easier in buffalo.
+Authentic is a library to implement username/password authentication easier in buffalo.
 
 #### Demo application
 
