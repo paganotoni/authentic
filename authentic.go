@@ -177,5 +177,9 @@ func applyDefaultConfig(c Config) Config {
 		c.AfterLogoutPath = "/"
 	}
 
+	if c.LoginPage == nil {
+		c.LoginPage = r.HTML("auth/login.html")
+	}
+
 	return c
 }

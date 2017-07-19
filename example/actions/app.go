@@ -63,9 +63,6 @@ func App() *buffalo.App {
 			LoginPath:       "/auth/login",
 			AfterLoginPath:  "/secure/home",
 			AfterLogoutPath: "/",
-
-			//This will later no longer be needed
-			LoginPage: r.HTML("auth/login.html"),
 			PublicHandlers: []buffalo.Handler{
 				HomeHandler,
 			},

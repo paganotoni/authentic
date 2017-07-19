@@ -149,9 +149,6 @@ func App() *buffalo.App {
 			LoginPath:       "/auth/login", //Path where the login will be
 			AfterLoginPath:  "/secure/home", //URL where the user will be redirected after login.
 			AfterLogoutPath: "/", //URL where the user will be redirected after logout.
-
-			//This will later no longer be needed
-			LoginPage: r.HTML("auth/login.html"),
 			PublicHandlers: []buffalo.Handler{ //Handlers that should not be secured by authentic.
 				HomeHandler,
 			},
