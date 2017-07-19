@@ -79,14 +79,21 @@ func buildHandler(r *render.Engine, message string) buffalo.Handler {
 func Test_AuthenticateMW(t *testing.T) {
 
 	r := render.New(render.Options{})
-	var public = buildHandler(r, "Public!")
-	var private = buildHandler(r, "Private!")
-
-	app := buffalo.Automatic(buffalo.Options{})
-	app.GET("/", public)
-	app.GET("/private", private)
-
 	provider := newTestAuthProvider("username", "password", "1", "User Name")
+
+	var public = func(c buffalo.Context) error {
+		return c.Render(http.StatusOK, r.String("public"))
+	}
+
+	var private = func(c buffalo.Context) error {
+		return c.Render(http.StatusOK, r.String("private"))
+	}
+
+	app := buffalo.Automatic(buffalo.Options{
+		Env: "development",
+	})
+
+	app.GET("/", public)
 	man := authentic.Setup(app, provider, authentic.Config{
 		LoginPath: "/login",
 		PublicHandlers: []buffalo.Handler{
@@ -94,7 +101,7 @@ func Test_AuthenticateMW(t *testing.T) {
 		},
 	})
 
-	w := willie.New(app)
+	app.GET("/private", private)
 
 	cases := []struct {
 		Name         string
@@ -102,11 +109,12 @@ func Test_AuthenticateMW(t *testing.T) {
 		ExpectedCode int
 		Location     string
 	}{
-		{"Public Path", "/", 200, ""},
-		{"Private Path", "/private", 302, man.Config.LoginPath},
+		{"Public Path", "/", http.StatusOK, ""},
+		{"Private Path", "/private", http.StatusSeeOther, man.Config.LoginPath},
 	}
 
 	for _, c := range cases {
+		w := willie.New(app)
 		t.Run(c.Name, func(t *testing.T) {
 			r := require.New(t)
 			resp := w.Request(c.Path).Get()
