@@ -6,20 +6,10 @@ import (
 
 	"github.com/apaganobeleno/authentic"
 	"github.com/gobuffalo/buffalo"
+	"github.com/gobuffalo/buffalo/render"
 	"github.com/markbates/willie"
 	"github.com/stretchr/testify/require"
 )
-
-func Test_applyDefaultConfig(t *testing.T) {
-	r := require.New(t)
-	manager := authentic.Setup(buffalo.Automatic(buffalo.Options{}), nil, authentic.Config{})
-
-	r.Equal("/auth/login", manager.Config.LoginPath)
-	r.Equal("/auth/logout", manager.Config.LogoutPath)
-
-	r.Equal("/", manager.Config.AfterLoginPath)
-	r.Equal("/", manager.Config.AfterLogoutPath)
-}
 
 func Test_Login(t *testing.T) {
 
@@ -75,6 +65,54 @@ func Test_Login(t *testing.T) {
 
 			r.Equal(resp.Code, c.ExpectedCode)
 			r.Equal(resp.Header().Get("Location"), c.ExpectedLocation)
+		})
+
+	}
+}
+
+func buildHandler(r *render.Engine, message string) buffalo.Handler {
+	return func(c buffalo.Context) error {
+		return c.Render(200, r.String(message))
+	}
+}
+
+func Test_AuthenticateMW(t *testing.T) {
+
+	r := render.New(render.Options{})
+	var public = buildHandler(r, "Public!")
+	var private = buildHandler(r, "Private!")
+
+	app := buffalo.Automatic(buffalo.Options{})
+	app.GET("/", public)
+	app.GET("/private", private)
+
+	provider := newTestAuthProvider("username", "password", "1", "User Name")
+	man := authentic.Setup(app, provider, authentic.Config{
+		LoginPath: "/login",
+		PublicHandlers: []buffalo.Handler{
+			public,
+		},
+	})
+
+	w := willie.New(app)
+
+	cases := []struct {
+		Name         string
+		Path         string
+		ExpectedCode int
+		Location     string
+	}{
+		{"Public Path", "/", 200, ""},
+		{"Private Path", "/private", 302, man.Config.LoginPath},
+	}
+
+	for _, c := range cases {
+		t.Run(c.Name, func(t *testing.T) {
+			r := require.New(t)
+			resp := w.Request(c.Path).Get()
+
+			r.Equal(resp.Code, c.ExpectedCode)
+			r.Equal(resp.Header().Get("Location"), c.Location)
 		})
 
 	}

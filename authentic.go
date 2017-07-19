@@ -6,7 +6,6 @@ import (
 	"golang.org/x/crypto/bcrypt"
 
 	"github.com/gobuffalo/buffalo"
-	"github.com/gobuffalo/buffalo/render"
 	"github.com/pkg/errors"
 )
 
@@ -17,18 +16,6 @@ type Authentic struct {
 	app      *buffalo.App
 	provider Provider
 	Config   Config
-}
-
-//Config holds detailed configuration for your authentication flow.
-type Config struct {
-	LoginPath       string
-	LogoutPath      string
-	AfterLoginPath  string
-	AfterLogoutPath string
-
-	//TODO: Default login page.
-	LoginPage      render.Renderer
-	PublicHandlers []buffalo.Handler
 }
 
 //AuthorizeMW Checks if the user is logged into the app if is not
@@ -137,7 +124,7 @@ func ValidatePassword(password string, user Authenticable) bool {
 // - Login form handler
 // - Logout handler
 func Setup(app *buffalo.App, provider Provider, config Config) *Authentic {
-	config = applyDefaultConfig(config)
+	config.applyDefault()
 
 	manager := &Authentic{
 		app:      app,
@@ -157,29 +144,4 @@ func Setup(app *buffalo.App, provider Provider, config Config) *Authentic {
 	}
 
 	return manager
-}
-
-//applyDefaultConfig applies default configuration to the Config object.
-func applyDefaultConfig(c Config) Config {
-	if c.LoginPath == "" {
-		c.LoginPath = "/auth/login"
-	}
-
-	if c.LogoutPath == "" {
-		c.LogoutPath = "/auth/logout"
-	}
-
-	if c.AfterLoginPath == "" {
-		c.AfterLoginPath = "/"
-	}
-
-	if c.AfterLogoutPath == "" {
-		c.AfterLogoutPath = "/"
-	}
-
-	if c.LoginPage == nil {
-		c.LoginPage = r.HTML("auth/login.html")
-	}
-
-	return c
 }
