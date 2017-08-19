@@ -9,7 +9,8 @@ import (
 	"github.com/pkg/errors"
 )
 
-var sessionField = "userID"
+//SessionField is the field in the session authentic uses to store userId
+const SessionField = "userID"
 
 //Authentic holds all your authentication configuration.
 type Authentic struct {
@@ -27,7 +28,7 @@ func (a Authentic) AuthorizeMW(h buffalo.Handler) buffalo.Handler {
 			return h(c)
 		}
 
-		userID := c.Session().Get(sessionField)
+		userID := c.Session().Get(SessionField)
 		if userID == nil {
 			c.Flash().Set("warning", []string{"Need to login first."})
 			return c.Redirect(http.StatusSeeOther, a.Config.LoginPath)
@@ -47,7 +48,7 @@ func (a Authentic) AuthorizeMW(h buffalo.Handler) buffalo.Handler {
 //CurrentUserMW will be called on every
 func (a Authentic) CurrentUserMW(h buffalo.Handler) buffalo.Handler {
 	return func(c buffalo.Context) error {
-		userID := c.Session().Get(sessionField)
+		userID := c.Session().Get(SessionField)
 
 		if userID == nil {
 			return h(c)
@@ -86,7 +87,7 @@ func (a Authentic) loginHandler(c buffalo.Context) error {
 		return c.Redirect(http.StatusSeeOther, a.Config.LoginPath)
 	}
 
-	c.Session().Set(sessionField, u.GetID())
+	c.Session().Set(SessionField, u.GetID())
 	c.Session().Save()
 
 	return c.Redirect(http.StatusSeeOther, a.Config.AfterLoginPath)
@@ -95,7 +96,7 @@ func (a Authentic) loginHandler(c buffalo.Context) error {
 //LogoutHandler logs the user out and redirect to the AfterLogoutPath
 func (a Authentic) logoutHandler(c buffalo.Context) error {
 	c.Flash().Add("success", "Logged out from your account.")
-	c.Session().Delete(sessionField)
+	c.Session().Delete(SessionField)
 	c.Session().Save()
 
 	return c.Redirect(302, a.Config.AfterLogoutPath)

@@ -125,3 +125,47 @@ func Test_AuthenticateMW(t *testing.T) {
 
 	}
 }
+
+func Test_CurrentUserMW(t *testing.T) {
+
+	r := render.New(render.Options{})
+	provider := newTestAuthProvider("username", "password", "1", "User Name")
+	provider.ValidUser = false
+
+	var public = func(c buffalo.Context) error {
+		return c.Render(http.StatusOK, r.String("public"))
+	}
+
+	var private = func(c buffalo.Context) error {
+		return c.Render(http.StatusOK, r.String("private"))
+	}
+
+	app := buffalo.Automatic(buffalo.Options{
+		Env: "development",
+	})
+
+	app.GET("/", public)
+	authentic.Setup(app, provider, authentic.Config{
+		LoginPath:      "/login",
+		AfterLoginPath: "/private",
+		PublicHandlers: []buffalo.Handler{
+			public,
+		},
+	})
+
+	app.GET("/private", private)
+
+	w := willie.New(app)
+	resp := w.Request("/login").Post(map[string]interface{}{
+		"Username": "username",
+		"Password": "password",
+	})
+
+	rr := require.New(t)
+	rr.Equal(resp.Code, http.StatusSeeOther)
+	rr.Equal(resp.Header().Get("Location"), "/private")
+
+	resp2 := w.Request("/private").Get()
+	rr.Equal(resp2.Code, http.StatusOK)
+
+}

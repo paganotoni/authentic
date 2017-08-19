@@ -30,6 +30,7 @@ func (tu testUser) GetID() interface{} {
 type testAuthProvider struct {
 	username, password, id string
 	user                   testUser
+	ValidUser              bool
 }
 
 func (ta testAuthProvider) FindByID(userID interface{}) (authentic.Authenticable, error) {
